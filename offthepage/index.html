@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Off the Page — a birthday visual novel</title>
+<meta name="description" content="A short visual novel about a girl who drew a robber running off the page, and grew up to write the rest of it. Made as a surprise for Ashe Newford's 41st birthday.">
+<meta property="og:title" content="Off the Page">
+<meta property="og:description" content="A short visual novel about a girl who drew a robber running off the page, and grew up to write the rest of it.">
+<meta property="og:image" content="https://ashenewford.github.io/offthepage/img/journal.webp">
+<link rel="icon" href="img/go.png">
+<style>
+  :root {
+    --paper: #fbf6e9;
+    --ink: #2b2a33;
+    --soft: #5d5a68;
+    --gold: #c98a2b;
+    --red: #c8423b;
+    --green: #4f8a3c;
+    --line: #c9d7ec;
+    --night: #1d2340;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--night);
+    color: var(--ink);
+    font: 18px/1.65 Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  }
+  .hero {
+    position: relative;
+    min-height: 78vh;
+    display: grid;
+    place-items: end center;
+    background: url("img/journal.webp") center / cover no-repeat;
+    padding: 0 1rem 3.5rem;
+  }
+  .hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(29,35,64,0) 40%, rgba(29,35,64,.92) 100%);
+  }
+  .hero-inner { position: relative; z-index: 1; text-align: center; color: #fff; max-width: 46rem; }
+  .hero h1 {
+    margin: 0;
+    font-size: clamp(2.8rem, 8vw, 5.2rem);
+    letter-spacing: .02em;
+    text-shadow: 0 3px 18px rgba(0,0,0,.55);
+  }
+  .hero p.tag { margin: .4rem 0 1.6rem; font-style: italic; font-size: 1.2rem; color: #f3e6c8; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+  .btn {
+    display: inline-block;
+    padding: .85rem 2.2rem;
+    border-radius: 999px;
+    background: var(--gold);
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.15rem;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,.35);
+    transition: transform .15s ease, background .15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); background: #d99a37; }
+  .btn.ghost { background: transparent; border: 2px solid #f3e6c8; color: #f3e6c8; box-shadow: none; margin-left: .6rem; }
+  .btn.ghost:hover { background: rgba(255,255,255,.08); }
+
+  main {
+    max-width: 50rem;
+    margin: -2rem auto 4rem;
+    position: relative;
+    z-index: 2;
+    background: var(--paper);
+    /* the lined half */
+    background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 1.62rem, var(--line) 1.62rem, var(--line) 1.65rem);
+    background-position: 0 1.2rem;
+    border-radius: 6px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    padding: 2.6rem clamp(1.2rem, 5vw, 3.6rem) 3rem;
+  }
+  main::before {
+    content: "";
+    position: absolute; top: 0; bottom: 0; left: clamp(.6rem, 3vw, 2.2rem);
+    width: 2px; background: rgba(200,66,59,.35);
+  }
+  h2 {
+    font-size: 1.55rem;
+    margin: 2.4rem 0 .6rem;
+    color: var(--night);
+  }
+  h2:first-child { margin-top: 0; }
+  p { margin: 0 0 1rem; }
+  .muted { color: var(--soft); }
+  figure { margin: 1.4rem 0; }
+  figure img { width: 100%; border-radius: 6px; display: block; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  figcaption { font-size: .9rem; color: var(--soft); font-style: italic; margin-top: .4rem; text-align: center; }
+
+  .warn {
+    border-left: 5px solid var(--red);
+    background: rgba(200,66,59,.08);
+    padding: 1rem 1.2rem;
+    border-radius: 4px;
+    margin: 1.2rem 0;
+  }
+  .warn strong { color: var(--red); }
+
+  table.keys { border-collapse: collapse; width: 100%; margin: .6rem 0 1rem; font-size: .98rem; }
+  table.keys td { padding: .45rem .5rem; vertical-align: top; border-bottom: 1px dashed rgba(43,42,51,.18); background: rgba(251,246,233,.85); }
+  table.keys td:first-child { white-space: nowrap; font-weight: bold; color: var(--night); width: 38%; }
+  kbd {
+    font: .85em/1 ui-monospace, Menlo, Consolas, monospace;
+    background: #fff; border: 1px solid #c9c3b3; border-bottom-width: 2px;
+    border-radius: 4px; padding: .15em .45em;
+  }
+  .cta { text-align: center; margin: 2.6rem 0 .4rem; }
+  .cta .btn.ghost { color: var(--night); border-color: var(--night); }
+  footer { text-align: center; color: #b9bfd8; font-size: .9rem; padding: 0 1rem 3rem; }
+  footer a { color: #f3e6c8; }
+  .go { width: 64px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Off the Page</h1>
+    <p class="tag">a story about a girl who drew a robber running off the page,<br>and grew up to write the rest of it.</p>
+    <a class="btn" href="play/">Play in your browser</a>
+    <a class="btn ghost" href="#how-to-play">How to play</a>
+  </div>
+</header>
+
+<main>
+
+  <h2>What is this?</h2>
+  <p>
+    <em>Off the Page</em> is a short visual novel, about an hour long, made as a surprise for my forty-first birthday.
+    It's set on the night before that birthday, in my living room in the Korean countryside, when something comes
+    tumbling out of the painting on my wall. The rest you'll have to find out for yourself.
+  </p>
+  <p>
+    You play as me (or as you; it asks for your name). It's funny, it's sweet, it will very possibly make you cry, and it's
+    stuffed with real details from my life: my kindergarten journal, the little lists of things I'm thankful for that I post
+    every Thanksgiving, my family, my cat. It's a love letter, more or less. Addressed to me, which is a strange and lovely thing to receive.
+  </p>
+
+  <h2>How it was made</h2>
+  <p>
+    I write romance and fantasy, and lately I've been making visual novels with Claude, the AI from Anthropic.
+    By now there's a whole stack of guides on how I like my stories, my art, my prose, and my code. So the day before my
+    birthday, I asked Claude for something new: make me a visual novel, by yourself, and don't tell me anything about it.
+  </p>
+  <p>
+    I answered a handful of questions (my earliest memory of writing, what's outside my window in November, my favorite cake,
+    which fictional men I'd run away with), handed over some photos and a decade of thankful lists, and then got out of the way.
+    Claude came up with the story, wrote it, made every picture with Google's Nano Banana image model, cleaned up the art,
+    and built the whole game in Ren'Py. It even generated the images itself, inside a project I could open but had to
+    promise not to look at. Which I'd covered with this:
+  </p>
+  <figure>
+    <img src="img/birthday_surprise.webp" alt="A bright cartoon banner reading 'Birthday Surprise' and 'NO PEEKING!' surrounded by balloons, presents and confetti" loading="lazy">
+    <figcaption>The cover I put on the art project so I wouldn't peek. It looks extremely like you should peek. I didn't.</figcaption>
+  </figure>
+  <p>
+    I played it on my birthday and laughed and cried in roughly equal measure. And then, because I can't not, I edited it:
+    fixed the wobbly bits, tightened some lines, added details only I would know, lampshaded a few oddities,
+    and wrangled the occasional robber with too many arms. About three quarters of it is still exactly as Claude first wrote it.
+  </p>
+
+  <h2 id="how-to-play">How to play</h2>
+  <p>
+    If you've never played a visual novel: it's a story you read, with pictures and music, where every so often you choose
+    what happens. There are no wrong answers and no way to lose. Turn your sound on.
+  </p>
+  <table class="keys">
+    <tr><td>Next line</td><td>Click, tap, or press <kbd>Space</kbd> / <kbd>Enter</kbd></td></tr>
+    <tr><td>Make a choice</td><td>Click or tap one of the buttons that appear</td></tr>
+    <tr><td>Go back</td><td>Scroll your mouse wheel up, or press <kbd>Page Up</kbd>. You can go back past a choice and pick something different.</td></tr>
+    <tr><td>Read what you missed</td><td>The <em>History</em> button at the bottom of the screen</td></tr>
+    <tr><td>Hide the text box</td><td>Press <kbd>H</kbd> (or middle-click) to admire the art. Press it again to bring the text back.</td></tr>
+    <tr><td>Skip what you've read</td><td>Hold <kbd>Ctrl</kbd>, or click <em>Skip</em></td></tr>
+    <tr><td>Auto-advance</td><td>Click <em>Auto</em></td></tr>
+    <tr><td>Menu, save &amp; load</td><td>Press <kbd>Esc</kbd> or right-click. Saves live in your browser, so use the same browser to come back.</td></tr>
+  </table>
+  <p class="muted">
+    Best on a computer or a tablet held sideways. The first load downloads about 80&nbsp;MB, so give it a minute on a slow connection.
+    The main menu also has a gallery of the illustrations you've unlocked, a scene maker for posing the characters yourself, and the credits.
+  </p>
+
+  <h2>Before you start</h2>
+  <div class="warn">
+    <p><strong>Content note.</strong> Most of this story is warm and silly, with some swearing and some tears. But in chapter three,
+    you'll be asked what kind of story this is:</p>
+    <p><em>PG, sweet</em> keeps things romantic and leaves it at a kiss.<br>
+    <em>R, fully R</em> means exactly that: an explicit sex scene.</p>
+    <p style="margin:0">Mom, family, coworkers: you know which button to press.</p>
+  </div>
+
+  <div class="cta">
+    <a class="btn" href="play/">Play <em>Off the Page</em></a>
+  </div>
+
+</main>
+
+<footer>
+  <p><img class="go" src="img/go.png" alt="A cheerful green worm leaning out of a red apple"></p>
+  <p>Written, drawn and built by Claude. Edited by Ashley, because she can't not.<br>
+  Music from Pixabay, mostly by Harumachi Music. Made with <a href="https://www.renpy.org/">Ren'Py</a>.</p>
+  <p><a href="/">Back to Ashe Newford's site</a></p>
+</footer>
+
+</body>
+</html>
